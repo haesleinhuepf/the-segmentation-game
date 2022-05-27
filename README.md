@@ -28,7 +28,7 @@ Depending on the used metric, it might be sufficient to annotate a hand full of 
 Use napari's annotation tools as shown below. 
 Use the `+` and `-` keys on your keyboard to increase and decrease the label number that is currently drawn.
 
-![](https://github.com/haesleinhuepf/the-segmentation-game/raw/main/images/algorithm_comparison.gif)
+![](https://github.com/haesleinhuepf/the-segmentation-game/raw/main/images/annotation.gif)
 
 ### Parameter tuning
 
