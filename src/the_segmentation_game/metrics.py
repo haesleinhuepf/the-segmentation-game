@@ -8,9 +8,6 @@ def jaccard_index_sparse(reference_label_image, test_label_image) -> float:
     reference_label_image = np.asarray(reference_label_image)
     test_label_image = np.asarray(test_label_image)
 
-    print(reference_label_image)
-    print(test_label_image)
-
     # determine overlap
     overlap = confusion_matrix(reference_label_image.ravel(), test_label_image.ravel())
 

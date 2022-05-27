@@ -69,6 +69,13 @@ class TheSegmentationGameWidget(QWidget):
         else:
             worker.start()
 
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        self.reset_choices()
+
+    def reset_choices(self, event=None):
+        self.ground_truth_annotation_select.reset_choices(event)
+        self.segmentation_result_select.reset_choices(event)
 
     def _save_clicked(self):
         if self.ground_truth_annotation_select.value is None:
@@ -77,10 +84,13 @@ class TheSegmentationGameWidget(QWidget):
         if self.segmentation_result_select.value is None:
             warnings.warn("No segmentation result was selected!")
             return
+        if self.segmentation_result_select.value is self.ground_truth_annotation_select.value:
+            warnings.warn("No ground truth annotation and segmentation result must not be the same!")
+            return None
 
     def _update_quality(self, quality:float):
         """Receive a quality measurement and store it in the user interface"""
-        self.quality_text.setText(str(quality))
+        self.quality_text.setText(str(quality)[0:5])
         if quality is not None:
             if quality > 0.9:
                 self.quality_text.setStyleSheet("QLabel { color : green }")
@@ -95,11 +105,13 @@ class TheSegmentationGameWidget(QWidget):
             return None
         if self.segmentation_result_select.value is None:
             return None
+        if self.segmentation_result_select.value is self.ground_truth_annotation_select.value:
+            return None
 
         from .metrics import jaccard_index_sparse
         function = jaccard_index_sparse
 
-        quality = function(self.ground_truth_annotation_select.value, self.segmentation_result_select.value)
+        quality = function(self.ground_truth_annotation_select.value.data, self.segmentation_result_select.value.data)
 
         return quality
 
