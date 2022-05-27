@@ -115,10 +115,14 @@ class TheSegmentationGameWidget(QWidget):
         if not isinstance(features, dict):
             features = features.to_dict(orient='list')
 
-        # store description
-        if "description" not in features.keys():
-            features["description"] = []
-        features["description"].append(self.description_field.text())
+        # store description, ground truth annotation and segmentation name
+        columns = ["description", "ground_truth_annotation", "segmentation_result"]
+        values = [self.description_field.text(), self.ground_truth_annotation_select.value.name, self.segmentation_result_select.value.name]
+        
+        for column, value in zip(columns, values):
+            if column not in features.keys():
+                features[column] = []
+            features[column].append(value)
 
         # store metrics
         from .metrics import Metrics
