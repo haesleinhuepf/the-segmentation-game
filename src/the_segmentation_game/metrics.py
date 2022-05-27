@@ -43,7 +43,7 @@ def jaccard_index_binary(reference_label_image, test_label_image) -> float:
     Determine how correct a given test segmentation is.
     As metric we use the Jaccard index.
     Assumtion: test and reference are binary images or
-    images with values 0=unknown, 1=False, 2=True.
+    label images with values 0=False, otherwise: True.
     """
     ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
     try:
@@ -58,11 +58,51 @@ def jaccard_index_binary(reference_label_image, test_label_image) -> float:
         reference_label_image = np.asarray(reference_label_image)
         test_label_image = np.asarray(test_label_image)
 
-    reference_label_image_max = reference_label_image.max()
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # return Jaccard Index
+    return tp / (tp + fn + fp)
+
+
+def jaccard_index_binary_sparse(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use the Jaccard index.
+    Assumtion: the test images has values 0=unknown, 1=False, 2=True.
+    The reference image can be a binary or label image with 0=False, otherwise:True
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
     test_label_image_max = test_label_image.max()
 
-    negative_reference = reference_label_image != reference_label_image_max
-    positive_reference = reference_label_image == reference_label_image_max
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
     negative_test = test_label_image != test_label_image_max
     positive_test = test_label_image == test_label_image_max
 
@@ -84,4 +124,5 @@ def jaccard_index_binary(reference_label_image, test_label_image) -> float:
 class Metrics(Enum):
     Jaccard_Index_sparse = partial(jaccard_index_sparse)
     Jaccard_Index_binary = partial(jaccard_index_binary)
+    Jaccard_Index_binary_sparse = partial(jaccard_index_binary_sparse)
 
