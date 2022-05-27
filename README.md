@@ -6,10 +6,11 @@
 [![tests](https://github.com/haesleinhuepf/the-segmentation-game/workflows/tests/badge.svg)](https://github.com/haesleinhuepf/the-segmentation-game/actions)
 [![codecov](https://codecov.io/gh/haesleinhuepf/the-segmentation-game/branch/main/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/the-segmentation-game)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/the-segmentation-game)](https://napari-hub.org/plugins/the-segmentation-game)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6588373.svg)](https://doi.org/10.5281/zenodo.6588373)
 
 Gamified image segmentation quality estimation
 
-![img.png](https://github.com/haesleinhuepf/the-segmentation-game/raw/main/images/screenshot.png)
+![img.png](https://github.com/haesleinhuepf/the-segmentation-game/raw/main/images/screencast.gif)
 
 ----------------------------------
 
