@@ -28,6 +28,7 @@ Before you can start playing the game, some annotated cells/nuclei are necessary
 Depending on the used metric, it might be sufficient to annotate a hand full of objects. 
 Use napari's annotation tools as shown below. 
 Use the `+` and `-` keys on your keyboard to increase and decrease the label number that is currently drawn.
+Note: Avoid label gaps. The labels must be continuously subsequent. If there are pixels annotated with value 2, there must be pixels annotated with value 1.
 
 ![](https://github.com/haesleinhuepf/the-segmentation-game/raw/main/images/annotation.gif)
 
