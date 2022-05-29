@@ -118,7 +118,7 @@ class TheSegmentationGameWidget(QWidget):
         # store description, ground truth annotation and segmentation name
         columns = ["description", "ground_truth_annotation", "segmentation_result"]
         values = [self.description_field.text(), self.ground_truth_annotation_select.value.name, self.segmentation_result_select.value.name]
-        
+
         for column, value in zip(columns, values):
             if column not in features.keys():
                 features[column] = []
@@ -162,6 +162,11 @@ class TheSegmentationGameWidget(QWidget):
             return None
         if self.segmentation_result_select.value is self.ground_truth_annotation_select.value:
             return None
+
+        if self.ground_truth_annotation_select.value.data.max() == 0:
+            return
+        if self.segmentation_result_select.value.data.max() == 0:
+            return
 
         quality = function(self.ground_truth_annotation_select.value.data, self.segmentation_result_select.value.data)
 
