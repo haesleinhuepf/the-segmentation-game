@@ -120,9 +120,137 @@ def jaccard_index_binary_sparse(reference_label_image, test_label_image) -> floa
 
     # return Jaccard Index
     return tp / (tp + fn + fp)
+    
+def roc_f1score_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use F1 score which is the harmonic mean of precision and sensitivity.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # return F1 score
+    return 2*tp / (2*tp + fn + fp)
+    
+def roc_accuracy_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use accuracy ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # return accuracy
+    return  (tp + tn)/(tp + tn + fp + fn)
+    
+def roc_balanced_accuracy_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use balance accuracy ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+    
+    # true positive ratr
+    tpr = tp / (tp + fn) 
+    
+    # true negative rate
+    tnr = tn / (tn + fp) 
+
+    # return balanced accuracy
+    return (tpr + tnr) / 2
 
 class Metrics(Enum):
     Jaccard_Index_sparse = partial(jaccard_index_sparse)
     Jaccard_Index_binary = partial(jaccard_index_binary)
     Jaccard_Index_binary_sparse = partial(jaccard_index_binary_sparse)
-
+    ROC_F1Score_binary=partial(roc_f1score_binary)
+    ROC_Accuracy_binary=partial(roc_accuracy_binary)
+    ROC_Balanced_Accuracy_binary=partial(roc_balanced_accuracy_binary)
