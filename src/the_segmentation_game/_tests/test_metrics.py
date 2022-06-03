@@ -66,4 +66,4 @@ def test_ROC_binary():
     
     assert met.roc_accuracy_binary(reference_labels, test_labels) == 0.9
     assert met.roc_balanced_accuracy_binary(reference_labels, test_labels) == 0.75
-    assert met.ROC_F1Score_binary(reference_labels, test_labels) == 2/3
+    assert met.roc_f1score_binary(reference_labels, test_labels) == 2/3
