@@ -70,8 +70,6 @@ Consider a two-class thresholding problem (binary pixel-wise classification obje
 
 The ROC measures or confusion matrix is invaluable in cases when when our binary classifier is not ideal (which is often) and we are aiming to not get a general good result but specified low error. In that case we usually need to decide for some trade off, for example we need all (as many as possible) classified true positive objects, but we do not mind getting (usually as few as possible) false positive objects.
 
-Other ROC metrics will be implemented soon...
-
 ## Related plugins
 
 If you aim at automatically optimizing segmentation quality, there are also napari plugins available with this capability:
