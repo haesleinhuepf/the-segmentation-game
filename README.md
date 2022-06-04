@@ -57,6 +57,18 @@ Currently, these metrics are implemented:
   Afterwards, the overlap between the two binary images is computed. This allows comparing binary segmentation algorithms, such as thresholding techniques.
 * Jaccard Index (binary, sparse): The annotated ground truth image can contain values 1 (negative, false) and 2 (positive, true) and
   the segmentation result image will be binarized (0: False, otherwise: True). This allows comparing object/no-object annotations with label images.
+ 
+ 
+Receiver operating characteristic ([ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic))
+  
+Consider a two-class thresholding problem (binary pixel-wise classification object/background), in which the outcomes are labeled either as positive (p) or negative (n). There are four possible outcomes from a binary classifier. If the outcome from a prediction is p and the actual value is also p, then it is called a true positive (TP); however if the actual value is n then it is said to be a false positive (FP). Conversely, a true negative (TN) has occurred when both the prediction outcome and the actual value are n, and false negative (FN) is when the prediction outcome is n while the actual value is p. We can organize result in table called confusion matrix, based on positive/neagtive results in row and true and false result in columns. From the confucsion matrix we can get many metrics with various usefulness. The curently implemented used for classification evaluation are:
+
+* Accuracy: (TP + TN)/ (TP + FP + TN + FN), Accuracy measures observational error. Accuracy is how close or far off a given set of measurements are to their true value. However, it usually fails in imbalanced sets.
+* Balanced Accuracy: (TP/(TP+FN) + TN/(TN+FP))/2, Balanced Accuracy is trying to even out problems of accuracy in imbalanced sets.
+* F1 Score: 2*TP/(2*TP + FP + TN + FN), In statistical analysis of binary classification, the F-score or F-measure is a measure of a test's accuracy. It is calculated from the precision and recall of the test, where the precision is the number of true positive results divided by the number of all positive results, including those not identified.
+* Threat score (TS) or critical success index (CSI): TP/(TP + FP + TN + FN), TC is another name for Jaccard Index (binary).
+
+The ROC measures or confusion matrix is invaluable in cases when when our binary classifier is not ideal (which is often) and we are aiming to not get a general good result but specified low error. In that case we usually need to decide for some trade off, for example we need all (as many as possible) classified true positive objects, but we do not mind getting (usually as few as possible) false positive objects.
 
 ## Related plugins
 
