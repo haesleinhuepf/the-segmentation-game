@@ -63,6 +63,9 @@ Receiver operating characteristic ([ROC](https://en.wikipedia.org/wiki/Receiver_
   
 Consider a two-class thresholding problem (binary pixel-wise classification object/background), in which the outcomes are labeled either as positive (p) or negative (n). There are four possible outcomes from a binary classifier. If the outcome from a prediction is p and the actual value is also p, then it is called a true positive (TP); however if the actual value is n then it is said to be a false positive (FP). Conversely, a true negative (TN) has occurred when both the prediction outcome and the actual value are n, and false negative (FN) is when the prediction outcome is n while the actual value is p. We can organize result in table called confusion matrix, based on positive/neagtive results in row and true and false result in columns. From the confucsion matrix we can get many metrics with various usefulness. The curently implemented used for classification evaluation are:
 
+* Sensitivity, recall, hit rate, or true positive rate (TPR): (TP)/ (TP + FP), Sensitivity and specificity mathematically describe the accuracy of a test which reports the presence or absence of a condition. Individuals for which the condition is satisfied are considered "positive" and those for which it is not are considered "negative".
+* Specificity, selectivity or true negative rate (TNR): (TN)/ (TN + FN), Sensitivity and specificity mathematically describe the accuracy of a test which reports the presence or absence of a condition. Individuals for which the condition is satisfied are considered "positive" and those for which it is not are considered "negative".
+* Precision or positive predictive value (PPV): (TP)/ (TP + FP), in computing and information science is the process of obtaining information system resources that are relevant to an information need from a collection of those resources. It is quantification for the TP events.
 * Accuracy: (TP + TN)/ (TP + FP + TN + FN), Accuracy measures observational error. Accuracy is how close or far off a given set of measurements are to their true value. However, it usually fails in imbalanced sets.
 * Balanced Accuracy: (TP/(TP+FN) + TN/(TN+FP))/2, Balanced Accuracy is trying to even out problems of accuracy in imbalanced sets.
 * F1 Score: 2*TP/(2*TP + FP + TN + FN), In statistical analysis of binary classification, the F-score or F-measure is a measure of a test's accuracy. It is calculated from the precision and recall of the test, where the precision is the number of true positive results divided by the number of all positive results, including those not identified.
@@ -70,6 +73,13 @@ Consider a two-class thresholding problem (binary pixel-wise classification obje
 
 The ROC measures or confusion matrix is invaluable in cases when when our binary classifier is not ideal (which is often) and we are aiming to not get a general good result but specified low error. In that case we usually need to decide for some trade off, for example we need all (as many as possible) classified true positive objects, but we do not mind getting (usually as few as possible) false positive objects.
 
+**What we want to achieve**
+
+![Precision-versus-accuracy, source: 10.13140/RG.2.1.1668.7603](https://github.com/martinschatz-cz/the-segmentation-game/blob/main/images/Precision-versus-accuracy.png)
+
+When we are doing semantic segmentation, we are aiming to classify each pixel (ideally correctly) to each of our classes. But that can be hugr ammount of information, and our object might have significantly much less pixels then number of pixels belonging to background and/or other classes. Before choosing right metrics, we need to set up goal for our classification results. Idealy, we would like to have high accuracy and precission for ach class (as is on pictur above), but we might be happy getting high accuracy with good precision. Realisticaly we might need to be more specific, as to choose how big error we are prepared to accept, or decide if it is acceptable to have FN findings but no FP.
+
+Picking up a metric for highly unbalanced classification as in semantic segmentation is challenging. Most of the classic metrics wil fail (but they are stil usable object-wise). And we usually stick up with Jaccard Index/Threat score, F1 Score or anything that will tell us result for TP rate (as we expect we will have less pixels for objects then background and/or other classes).
 ## Related plugins
 
 If you aim at automatically optimizing segmentation quality, there are also napari plugins available with this capability:
