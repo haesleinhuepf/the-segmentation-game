@@ -69,7 +69,7 @@ Consider a two-class thresholding problem (binary pixel-wise classification obje
 * Accuracy: (TP + TN)/ (TP + FP + TN + FN), Accuracy measures observational error. Accuracy is how close or far off a given set of measurements are to their true value. However, it usually fails in imbalanced sets.
 * Balanced Accuracy: (TP/(TP+FN) + TN/(TN+FP))/2, Balanced Accuracy is trying to even out problems of accuracy in imbalanced sets.
 * F1 Score: 2*TP/(2*TP + FP + TN + FN), In statistical analysis of binary classification, the F-score or F-measure is a measure of a test's accuracy. It is calculated from the precision and recall of the test, where the precision is the number of true positive results divided by the number of all positive results, including those not identified.
-* Threat score (TS) or critical success index (CSI): TP/(TP + FP + TN + FN), TC is another name for Jaccard Index (binary).
+* Threat score (TS) or critical success index (CSI): TP/(TP + FP + FN), TC is another name for Jaccard Index (binary).
 
 The ROC measures or confusion matrix is invaluable in cases when when our binary classifier is not ideal (which is often) and we are aiming to not get a general good result but specified low error. In that case we usually need to decide for some trade off, for example we need all (as many as possible) classified true positive objects, but we do not mind getting (usually as few as possible) false positive objects.
 
