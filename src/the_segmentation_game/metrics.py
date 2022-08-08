@@ -247,6 +247,177 @@ def roc_balanced_accuracy_binary(reference_label_image, test_label_image) -> flo
     # return balanced accuracy
     return (tpr + tnr) / 2
 
+def roc_true_positive_rate_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use true positive rate ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # true positive rate
+    tpr = tp / (tp + fn)
+
+    # return true positive rate
+    return tpr
+
+
+def roc_true_negative_rate_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use true negative rate ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # true negative rate
+    tnr = tn / (tn + fp)
+
+    # return true negative rate
+    return tnr
+
+def roc_positive_predictive_value_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use positive predictive value ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # positive predictive value
+    ppv = tp / (tp + fp)
+
+    return ppv
+
+def roc_threat_score_binary(reference_label_image, test_label_image) -> float:
+    """
+    Determine how correct a given test segmentation is.
+    As metric we use threat score ROC metric.
+    Assumtion: test and reference are binary images or
+    label images with values 0=False, otherwise: True.
+    """
+    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
+    try:
+        import pyclesperanto_prototype as cle
+        binary_and = cle.binary_and
+
+        reference_label_image = cle.push(reference_label_image)
+        test_label_image = cle.push(test_label_image)
+    except ImportError:
+        binary_and = np.logical_and
+
+        reference_label_image = np.asarray(reference_label_image)
+        test_label_image = np.asarray(test_label_image)
+
+    negative_reference = reference_label_image == 0
+    positive_reference = reference_label_image != 0
+    negative_test = test_label_image == 0
+    positive_test = test_label_image != 0
+
+    # true positive:
+    tp = binary_and(positive_reference, positive_test).sum()
+
+    # true negative:
+    tn = binary_and(negative_reference, negative_test).sum()
+
+    # false positive
+    fp = binary_and(negative_reference, positive_test).sum()
+
+    # false negative
+    fn = binary_and(positive_reference, negative_test).sum()
+
+    # threat score
+    ts = tp / (tp + fp + fn)
+
+    return ts
+
 class Metrics(Enum):
     Jaccard_Index_sparse = partial(jaccard_index_sparse)
     Jaccard_Index_binary = partial(jaccard_index_binary)
@@ -254,3 +425,7 @@ class Metrics(Enum):
     ROC_F1Score_binary=partial(roc_f1score_binary)
     ROC_Accuracy_binary=partial(roc_accuracy_binary)
     ROC_Balanced_Accuracy_binary=partial(roc_balanced_accuracy_binary)
+    ROC_True_Negative_Rate_binary = partial(roc_true_negative_rate_binary)
+    ROC_True_Positive_Rate_binary = partial(roc_true_positive_rate_binary)
+    ROC_Positive_Predictive_Value_binary = partial(roc_positive_predictive_value_binary)
+    ROC_Threat_Score_binary = partial(roc_threat_score_binary)
