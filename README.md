@@ -80,6 +80,12 @@ The ROC measures or confusion matrix is invaluable in cases when when our binary
 When we are doing semantic segmentation, we are aiming to classify each pixel (ideally correctly) to each of our classes. But that can be hugr ammount of information, and our object might have significantly much less pixels then number of pixels belonging to background and/or other classes. Before choosing right metrics, we need to set up goal for our classification results. Idealy, we would like to have high accuracy and precission for ach class (as is on pictur above), but we might be happy getting high accuracy with good precision. Realisticaly we might need to be more specific, as to choose how big error we are prepared to accept, or decide if it is acceptable to have FN findings but no FP.
 
 Picking up a metric for highly unbalanced classification as in semantic segmentation is challenging. Most of the classic metrics wil fail (but they are stil usable object-wise). And we usually stick up with Jaccard Index/Threat score, F1 Score or anything that will tell us result for TP rate (as we expect we will have less pixels for objects then background and/or other classes).
+
+## Literature recommendation
+
+How to choose the right metric for comparing segmentation results is explained in this paper:
+* [Metrics reloaded: Pitfalls and recommendations for image analysis validation. Maier-Hein L. and Reinke A. et al.](https://arxiv.org/abs/2206.01653)
+
 ## Related plugins
 
 If you aim at automatically optimizing segmentation quality, there are also napari plugins available with this capability:
