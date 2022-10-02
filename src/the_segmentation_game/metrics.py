@@ -45,35 +45,7 @@ def jaccard_index_binary(reference_label_image, test_label_image) -> float:
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # return Jaccard Index
     return tp / (tp + fn + fp)
@@ -128,35 +100,7 @@ def roc_f1score_binary(reference_label_image, test_label_image) -> float:
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # return F1 score
     return 2*tp / (2*tp + fn + fp)
@@ -168,35 +112,7 @@ def roc_accuracy_binary(reference_label_image, test_label_image) -> float:
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # return accuracy
     return  (tp + tn)/(tp + tn + fp + fn)
@@ -208,35 +124,7 @@ def roc_balanced_accuracy_binary(reference_label_image, test_label_image) -> flo
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
     
     # true positive ratr
     tpr = tp / (tp + fn) 
@@ -254,35 +142,7 @@ def roc_true_positive_rate_binary(reference_label_image, test_label_image) -> fl
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # true positive rate
     tpr = tp / (tp + fn)
@@ -298,35 +158,7 @@ def roc_true_negative_rate_binary(reference_label_image, test_label_image) -> fl
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # true negative rate
     tnr = tn / (tn + fp)
@@ -341,35 +173,7 @@ def roc_positive_predictive_value_binary(reference_label_image, test_label_image
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
-    ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
-    try:
-        import pyclesperanto_prototype as cle
-        binary_and = cle.binary_and
-
-        reference_label_image = cle.push(reference_label_image)
-        test_label_image = cle.push(test_label_image)
-    except ImportError:
-        binary_and = np.logical_and
-
-        reference_label_image = np.asarray(reference_label_image)
-        test_label_image = np.asarray(test_label_image)
-
-    negative_reference = reference_label_image == 0
-    positive_reference = reference_label_image != 0
-    negative_test = test_label_image == 0
-    positive_test = test_label_image != 0
-
-    # true positive:
-    tp = binary_and(positive_reference, positive_test).sum()
-
-    # true negative:
-    tn = binary_and(negative_reference, negative_test).sum()
-
-    # false positive
-    fp = binary_and(negative_reference, positive_test).sum()
-
-    # false negative
-    fn = binary_and(positive_reference, negative_test).sum()
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
 
     # positive predictive value
     ppv = tp / (tp + fp)
@@ -383,6 +187,29 @@ def roc_threat_score_binary(reference_label_image, test_label_image) -> float:
     Assumtion: test and reference are binary images or
     label images with values 0=False, otherwise: True.
     """
+    tp, tn, fp, fn = compute_tp_tn_fp_fn(reference_label_image, test_label_image)
+
+    # threat score
+    ts = tp / (tp + fp + fn)
+
+    return ts
+
+def compute_tp_tn_fp_fn(reference_label_image, test_label_image):
+    """Compute overlap statistics:
+    * tp = true positives
+    * tn = true negatives
+    * fp = false positives
+    * fn = false negatives
+
+    Parameters
+    ----------
+    reference_label_image: Image, e.g. a manual ground truth annotation
+    test_label_image: Image, e.g. an algorithm result to determine the quality of
+
+    Returns
+    -------
+    tp, tn, fp, fn
+    """
     ### adapted from https://github.com/haesleinhuepf/napari-workflow-optimizer/blob/20c3baaf3009caf26909b57f08181108a731e67e/src/napari_workflow_optimizer/_optimizer.py#L248
     try:
         import pyclesperanto_prototype as cle
@@ -413,10 +240,7 @@ def roc_threat_score_binary(reference_label_image, test_label_image) -> float:
     # false negative
     fn = binary_and(positive_reference, negative_test).sum()
 
-    # threat score
-    ts = tp / (tp + fp + fn)
-
-    return ts
+    return tp, tn, fp, fn
 
 class Metrics(Enum):
     Jaccard_Index_sparse = partial(jaccard_index_sparse)
