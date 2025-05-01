@@ -99,6 +99,8 @@ You can install `the-segmentation-game` via [pip]:
 
     pip install the-segmentation-game
 
+Note: This plugin is not compatible with napari 0.6.0 or later.
+
 ## Contributing
 
 Contributions - especially new image segmentation quality metrics - are very welcome. Tests can be run with [tox], please ensure
